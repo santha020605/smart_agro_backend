@@ -50,9 +50,9 @@ public class ProductsService {
 	}
 	
 	private LocalDateTime now = LocalDateTime.now();
-    private final LocalDateTime todayAuctionStart = now.withHour(10).withMinute(00).withSecond(0);
-    private final LocalDateTime todayAuctionEnd = now.withHour(12).withMinute(00).withSecond(0);
-    private final LocalDateTime todayLastSale = now.withHour(20).withMinute(00).withSecond(0);
+    private final LocalDateTime todayAuctionStart = now.withHour(12).withMinute(30).withSecond(0);
+    private final LocalDateTime todayAuctionEnd = now.withHour(14).withMinute(30).withSecond(0);
+    private final LocalDateTime todayLastSale = now.withHour(22).withMinute(30).withSecond(0);
 
 	
 	public Products addProduct(Products product) {
