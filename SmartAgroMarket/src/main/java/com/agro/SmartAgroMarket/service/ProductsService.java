@@ -64,9 +64,10 @@ public class ProductsService {
 	    
 	    LocalDateTime startTime = todayAuctionStart;
 	    LocalDateTime endTime = todayAuctionEnd;
+		LocalDateTime lastSale = todayLastSale;
 
 	    
-	    if (now.isBefore(todayLastSale)) {
+	    if (now.isBefore(lastSale)) {
 
 	        if (now.isBefore(todayAuctionStart)) {
 	            startTime = todayAuctionStart;
@@ -86,7 +87,7 @@ public class ProductsService {
 
 	            product.setStatus("AVAILABLE");
 	            product.setAuctionStartTime(endTime);
-	            product.setAuctionEndTime(todayLastSale);
+	            product.setAuctionEndTime(lastSale);
 	            product.setUpdatedTime(now);
 	            
 	            return productRepo.save(product);
@@ -97,6 +98,7 @@ public class ProductsService {
 	        // CASE 2: After 8 PM  Next day auction
 	        startTime = todayAuctionStart.plusDays(1);
 	        endTime = todayAuctionEnd.plusDays(1);
+			lastSale = todayLastSale.plusDays(1);
 	    }
 	    
 	    product.setAuctionStartTime(startTime);
