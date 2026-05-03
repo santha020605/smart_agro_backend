@@ -72,10 +72,12 @@ public class ProductsService {
 	        if (now.isBefore(todayAuctionStart)) {
 	            startTime = todayAuctionStart;
 	            endTime = todayAuctionEnd;
+				product.setStatus("NOT STARTED");
 	        }
 	        else if (now.isBefore(todayAuctionEnd)) {
 	            startTime = todayAuctionStart;
 	            endTime = todayAuctionEnd;
+				product.setStatus("IN PROGRESS");
 	        }
 	        else if(now.isAfter(todayAuctionEnd)) {
 	        	Double lastPrice = auctionRepo.findLastHighestPriceByProductName(product.getName());
@@ -99,12 +101,12 @@ public class ProductsService {
 	        startTime = todayAuctionStart.plusDays(1);
 	        endTime = todayAuctionEnd.plusDays(1);
 			lastSale = todayLastSale.plusDays(1);
+			product.setStatus("NOT STARTED");
 	    }
 	    
 	    product.setAuctionStartTime(startTime);
 	    product.setAuctionEndTime(endTime);
 	    product.setUpdatedTime(now);
-	    product.setStatus("NOT STARTED");
 	    
 
 		
@@ -237,11 +239,11 @@ public BuyResponseDTO requestDonatedProduct(BuyRequestDTO request) {
 //				break;
 //				
 //			}
-			   int remaining = p.getQuantity();
+			   int remaining = p.getRemainingQuantity();
 				
 				for(Auctions auction : auctions) {
 					
-					if(remaining<=0) {
+					if(remaining<=0 || auction.isAllocated()) {
 						break;
 					}
 					if(auction.getQuantity()<=remaining) {
@@ -462,7 +464,7 @@ public BuyResponseDTO requestDonatedProduct(BuyRequestDTO request) {
 		auction.setAuctionTime(now);
 		auction.setBuyerPhone(buyer.getPhone());
 		auction.setProductId(product.getId());
-		auction.setQuantity(product.getQuantity());
+		auction.setQuantity(req.getRequestedQuantity());
 		
 		auctionRepo.save(auction);
 		
@@ -529,7 +531,7 @@ public String donateNow(Long requestId) {
 		auction.setAuctionTime(now);
 		auction.setBuyerPhone(buyer.getContact());
 		auction.setProductId(product.getId());
-		auction.setQuantity(product.getQuantity());
+		auction.setQuantity(req.getRequestedQuantity());
 		
 		auctionRepo.save(auction);
 		
